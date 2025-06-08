@@ -1,0 +1,25 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8 text-gray-800">Send Message to User</h1>
+    <form method="post" class="bg-white p-8 rounded-lg shadow-lg max-w-xl mx-auto border border-gray-200">
+        <div class="mb-6">
+            <label for="user_id" class="block font-semibold mb-2 text-gray-700">Select User:</label>
+            <select name="user_id" id="user_id" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                {% for user in users %}
+                <option value="{{ user.id }}">{{ user.username }} ({{ user.email }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-6">
+            <label for="subject" class="block font-semibold mb-2 text-gray-700">Subject:</label>
+            <input type="text" name="subject" id="subject" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+        </div>
+        <div class="mb-6">
+            <label for="message" class="block font-semibold mb-2 text-gray-700">Message:</label>
+            <textarea name="message" id="message" rows="5" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required></textarea>
+        </div>
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-semibold shadow">Send Message</button>
+    </form>
+</div>
+{% endblock %} 

@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
+    
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold mb-4">Social Media Connections</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for connection in connections %}
+            <div class="bg-white p-4 rounded-lg shadow">
+                <h3 class="font-semibold">{{ connection.platform|title }}</h3>
+                <p class="text-gray-600">Connected as: {{ connection.platform_user_id }}</p>
+                <p class="text-sm text-gray-500">Connected at: {{ connection.connected_at.strftime('%Y-%m-%d %H:%M') }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold mb-4">Connect New Account</h2>
+        <div class="flex flex-wrap gap-4">
+            
+        </div>
+    </div>
+
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+        <div class="flex flex-wrap gap-4">
+            <a href="{{ url_for('main.analyze') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                Analyze Content
+            </a>
+            <a href="{{ url_for('main.sentiment_demo') }}" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded">
+                Sentiment Analysis Demo
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="bg-white shadow rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Your Digital Footprint Overview</h3>
+        
+        <!-- Platform Selection -->
+        <div class="mt-4">
+            <label for="platform" class="block text-sm font-medium text-gray-700">Select Platform</label>
+            <select id="platform" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                <option value="all">All Platforms</option>
+                <option value="twitter">Twitter</option>
+                <option value="facebook">Facebook</option>
+                <option value="instagram">Instagram</option>
+                <option value="linkedin">LinkedIn</option>
+            </select>
+        </div>
+
+        <!-- Analytics Cards -->
+        <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-users text-indigo-600 text-2xl"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Total Followers</dt>
+                                <dd class="text-lg font-semibold text-gray-900">2,543</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-comment text-indigo-600 text-2xl"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Total Posts</dt>
+                                <dd class="text-lg font-semibold text-gray-900">1,234</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-heart text-indigo-600 text-2xl"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Total Engagement</dt>
+                                <dd class="text-lg font-semibold text-gray-900">45.2K</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-chart-line text-indigo-600 text-2xl"></i>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Growth Rate</dt>
+                                <dd class="text-lg font-semibold text-gray-900">+12.5%</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <h4 class="text-lg font-medium text-gray-900">Engagement Over Time</h4>
+                    <div id="engagementChart" style="height: 300px;"></div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <h4 class="text-lg font-medium text-gray-900">Platform Distribution</h4>
+                    <div id="platformChart" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="mt-8">
+            <h4 class="text-lg font-medium text-gray-900">Recent Activity</h4>
+            <div class="mt-4 bg-white shadow overflow-hidden sm:rounded-md">
+                <ul class="divide-y divide-gray-200">
+                    <li>
+                        <div class="px-4 py-4 sm:px-6">
+                            <div class="flex items-center justify-between">
+                                <p class="text-sm font-medium text-indigo-600 truncate">New Twitter Followers</p>
+                                <div class="ml-2 flex-shrink-0 flex">
+                                    <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">+12</p>
+                                </div>
+                            </div>
+                            <div class="mt-2 sm:flex sm:justify-between">
+                                <div class="sm:flex">
+                                    <p class="flex items-center text-sm text-gray-500">Last 24 hours</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="px-4 py-4 sm:px-6">
+                            <div class="flex items-center justify-between">
+                                <p class="text-sm font-medium text-indigo-600 truncate">Instagram Post Engagement</p>
+                                <div class="ml-2 flex-shrink-0 flex">
+                                    <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">+245</p>
+                                </div>
+                            </div>
+                            <div class="mt-2 sm:flex sm:justify-between">
+                                <div class="sm:flex">
+                                    <p class="flex items-center text-sm text-gray-500">Last 24 hours</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Sample data for charts
+    const engagementData = {
+        x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        y: [1000, 1500, 2000, 1800, 2500, 3000],
+        type: 'scatter',
+        mode: 'lines+markers',
+        name: 'Engagement'
+    };
+
+    const platformData = [{
+        values: [30, 25, 20, 25],
+        labels: ['Twitter', 'Facebook', 'Instagram', 'LinkedIn'],
+        type: 'pie'
+    }];
+
+    Plotly.newPlot('engagementChart', [engagementData], {
+        title: 'Engagement Trends',
+        margin: { t: 30, b: 40, l: 40, r: 30 }
+    });
+
+    Plotly.newPlot('platformChart', platformData, {
+        title: 'Platform Distribution',
+        margin: { t: 30, b: 40, l: 40, r: 30 }
+    });
+</script>
+{% endblock %} 

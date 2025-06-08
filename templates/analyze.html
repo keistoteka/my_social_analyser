@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-white shadow rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Connect Your Social Media Accounts</h3>
+        
+        <!-- Social Media Connection Cards -->
+        <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {% set status_map = {
+            'connected': 'border-green-500',
+            'disconnected': 'border-purple-500',
+            'never': 'border-gray-200'
+          } %}
+          {% for platform in platforms %}
+            {% set conn = connections.get(platform) %}
+            {% if conn %}
+              {% if conn.credentials %}
+                {% set status = 'connected' %}
+              {% else %}
+                {% set status = 'disconnected' %}
+              {% endif %}
+            {% else %}
+              {% set status = 'never' %}
+            {% endif %}
+            <div class="bg-white overflow-hidden shadow rounded-lg border-2 {{ status_map[status] }}">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    {% if platform == 'twitter' %}<i class="fab fa-twitter text-blue-400 text-2xl"></i>{% endif %}
+                    {% if platform == 'facebook' %}<i class="fab fa-facebook text-blue-600 text-2xl"></i>{% endif %}
+                    {% if platform == 'instagram' %}<i class="fab fa-instagram text-pink-500 text-2xl"></i>{% endif %}
+                    {% if platform == 'linkedin' %}<i class="fab fa-linkedin text-blue-700 text-2xl"></i>{% endif %}
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <h4 class="text-lg font-medium text-gray-900">{{ platform|capitalize }}</h4>
+                    <p class="mt-1 text-sm text-gray-500">
+                      {% if status == 'connected' %}
+                        <span class="text-green-600 font-semibold">Connected</span>
+                      {% elif status == 'disconnected' %}
+                        <span class="text-purple-600 font-semibold">Disconnected</span>
+                      {% else %}
+                        Connect your {{ platform|capitalize }} account
+                      {% endif %}
+                    </p>
+                  </div>
+                </div>
+                <div class="mt-4 flex flex-col gap-2">
+                  {% if status == 'connected' %}
+                    <form method="POST" action="/disconnect-social">
+                      <input type="hidden" name="platform" value="{{ platform }}">
+                      <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700">Disconnect</button>
+                    </form>
+                  {% else %}
+                    {% if platform == 'facebook' %}
+                      <a href="/login/facebook" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">Connect with Facebook</a>
+                    {% elif platform == 'linkedin' %}
+                      <a href="/login/linkedin" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-700 hover:bg-blue-800">Connect with LinkedIn</a>
+                    {% elif platform == 'instagram' %}
+                      <a href="/login/instagram" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-pink-500 hover:bg-pink-600">Connect with Instagram</a>
+                    {% else %}
+                      <button class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white {% if platform == 'twitter' %}bg-blue-400 hover:bg-blue-500{% endif %} connect-btn" data-platform="{{ platform }}">Connect</button>
+                    {% endif %}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Analysis Options -->
+        <div class="mt-8">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Analysis Options</h3>
+            <div class="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="engagement" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="engagement" class="font-medium text-gray-700">Engagement Analysis</label>
+                                <p class="text-gray-500">Analyze likes, comments, and shares across platforms</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="sentiment" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="sentiment" class="font-medium text-gray-700">Sentiment Analysis</label>
+                                <p class="text-gray-500">Analyze the sentiment of your posts and comments</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="growth" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="growth" class="font-medium text-gray-700">Growth Analysis</label>
+                                <p class="text-gray-500">Track follower growth and engagement trends</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="content" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="content" class="font-medium text-gray-700">Content Analysis</label>
+                                <p class="text-gray-500">Analyze your most successful content types</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        {% set any_connected = false %}
+                        {% for platform in platforms %}
+                          {% set conn = connections.get(platform) %}
+                          {% if conn and (conn.credentials or conn.access_token) %}
+                            {% set any_connected = true %}
+                          {% endif %}
+                        {% endfor %}
+                        <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" {% if not any_connected %}disabled title="Connect at least one social account to start analysis" class="opacity-50 cursor-not-allowed"{% endif %}>
+                            Start Analysis
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pridėsiu paaiškinimą vartotojui -->
+        <div class="mb-6">
+          <p class="text-gray-600 text-sm">
+            Social network connection is <span class="font-semibold">optional</span>. You can use the system without connecting your social accounts. Connect Facebook, LinkedIn, etc. only if you want to analyze your social media data.
+          </p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="connectModal" class="fixed z-50 inset-0 overflow-y-auto hidden">
+  <div class="flex items-center justify-center min-h-screen px-4">
+    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+      <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+    </div>
+    <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg w-full z-50">
+      <div class="px-6 py-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-medium text-gray-900" id="modalPlatformTitle">Connect</h3>
+          <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">&times;</button>
+        </div>
+        <form id="connectForm" method="POST" action="/connect-social">
+          <input type="hidden" name="platform" id="modalPlatformInput">
+          <div class="mb-4">
+            <label for="modalEmail" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" name="email" id="modalEmail" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+          </div>
+          <div class="mb-4">
+            <label for="modalPassword" class="block text-sm font-medium text-gray-700">Password</label>
+            <input type="password" name="password" id="modalPassword" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+          </div>
+          <div class="mb-4">
+            <label class="inline-flex items-center">
+              <input type="checkbox" name="save_credentials" class="round-checkbox">
+              <span class="ml-2 text-gray-500 text-sm">Remember my credentials for future logins</span>
+            </label>
+          </div>
+          <div class="mb-4">
+            <label class="inline-flex items-center">
+              <input type="checkbox" name="remember_facebook_creds" class="round-checkbox">
+              <span class="ml-2 text-gray-500 text-sm">Remember my Facebook credentials for future logins</span>
+            </label>
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Analysis Options</label>
+            <div class="flex flex-wrap gap-4">
+              <label class="inline-flex items-center">
+                <input type="checkbox" name="analysis_options" value="Engagement Analysis" class="form-checkbox h-4 w-4 text-indigo-600">
+                <span class="ml-2 text-gray-700">Engagement Analysis</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input type="checkbox" name="analysis_options" value="Sentiment Analysis" class="form-checkbox h-4 w-4 text-indigo-600">
+                <span class="ml-2 text-gray-700">Sentiment Analysis</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input type="checkbox" name="analysis_options" value="Growth Analysis" class="form-checkbox h-4 w-4 text-indigo-600">
+                <span class="ml-2 text-gray-700">Growth Analysis</span>
+              </label>
+              <label class="inline-flex items-center">
+                <input type="checkbox" name="analysis_options" value="Content Analysis" class="form-checkbox h-4 w-4 text-indigo-600">
+                <span class="ml-2 text-gray-700">Content Analysis</span>
+              </label>
+            </div>
+          </div>
+          <div class="mt-6">
+            <button type="submit" class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow hover:bg-indigo-700">Connect</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function openModal(platform) {
+  document.getElementById('connectModal').classList.remove('hidden');
+  document.getElementById('modalPlatformTitle').textContent = 'Connect to ' + platform.charAt(0).toUpperCase() + platform.slice(1);
+  document.getElementById('modalPlatformInput').value = platform.toLowerCase();
+}
+function closeModal() {
+  document.getElementById('connectModal').classList.add('hidden');
+}
+document.querySelectorAll('.connect-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    openModal(this.dataset.platform);
+  });
+});
+document.getElementById('connectForm').addEventListener('submit', function(e) {
+  if (document.getElementById('modalPlatformInput').value === 'facebook') {
+    const rememberCheckbox = document.querySelector('input[name="remember_facebook_creds"]');
+    if (rememberCheckbox && rememberCheckbox.checked) {
+      sessionStorage.setItem('remember_facebook_creds', 'true');
+    }
+  }
+});
+</script>
+<style>
+input[type="checkbox"].round-checkbox {
+  border-radius: 50%;
+  width: 1.1em;
+  height: 1.1em;
+  border: 2px solid #6366f1;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+input[type="checkbox"].round-checkbox:checked {
+  background: #6366f1;
+  border-color: #6366f1;
+}
+input[type="checkbox"].round-checkbox:checked:after {
+  content: '';
+  display: block;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 0.2em;
+  left: 0.2em;
+}
+</style>
+{% endblock %} 

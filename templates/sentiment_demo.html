@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-xl font-bold mb-4">Sentiment Analysis Demo</h2>
+<ul>
+  {% for text, sent in texts|zip(sentiment) %}
+    <li class="mb-2 border-b pb-2">
+      <div><strong>Text:</strong> {{ text }}</div>
+      <div><strong>Positive:</strong> {{ sent['pos'] }}, <strong>Neutral:</strong> {{ sent['neu'] }}, <strong>Negative:</strong> {{ sent['neg'] }}, <strong>Compound:</strong> {{ sent['compound'] }}</div>
+    </li>
+  {% endfor %}
+</ul>
+<div class="mt-6">
+  <img src="data:image/png;base64,{{ img_base64 }}" alt="Sentiment Chart" class="border rounded shadow"/>
+</div>
+{% endblock %} 
