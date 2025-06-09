@@ -18,4 +18,5 @@ vaderSentiment
 matplotlib
 seaborn
 numpy
-Flask-Mail 
+Flask-Mail
+gunicorn
