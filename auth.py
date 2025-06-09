@@ -1,10 +1,13 @@
-from flask import request, jsonify, redirect, url_for, session
+from flask import request, jsonify, redirect, url_for, session, Blueprint
 from flask_login import login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
 import os
 import urllib.parse
+from models import LinkedInAccount
 
 db = SQLAlchemy()
+
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 LINKEDIN_CLIENT_ID = os.environ.get('LINKEDIN_CLIENT_ID')
 LINKEDIN_CLIENT_SECRET = os.environ.get('LINKEDIN_CLIENT_SECRET')
