@@ -20,3 +20,4 @@ seaborn
 numpy
 Flask-Mail
 gunicorn
+authlib
