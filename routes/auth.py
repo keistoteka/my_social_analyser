@@ -10,7 +10,7 @@ import requests
 import os
 from flask_mail import Message
 
-auth = Blueprint('auth', __name__)
+auth = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
@@ -262,4 +262,8 @@ def instagram_callback():
     except Exception as e:
         print('EXCEPTION in Instagram callback:', e)
         flash('Instagram login failed. Please try again.', 'error')
-        return redirect(url_for('auth.login')) 
+        return redirect(url_for('auth.login'))
+
+@auth.route('/linkedin-login')
+def oauth_linkedin_login():
+    return redirect(url_for('auth.linkedin_login')) 

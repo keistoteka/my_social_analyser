@@ -55,7 +55,7 @@
                     {% if platform == 'facebook' %}
                       <a href="/login/facebook" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">Connect with Facebook</a>
                     {% elif platform == 'linkedin' %}
-                      <a href="/login/linkedin" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-700 hover:bg-blue-800">Connect with LinkedIn</a>
+                      <a href="/auth/linkedin-login" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-700 hover:bg-blue-800">Connect with LinkedIn</a>
                     {% elif platform == 'instagram' %}
                       <a href="/login/instagram" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-pink-500 hover:bg-pink-600">Connect with Instagram</a>
                     {% else %}
@@ -203,6 +203,7 @@
     </div>
   </div>
 </div>
+
 <script>
 function openModal(platform) {
   document.getElementById('connectModal').classList.remove('hidden');
