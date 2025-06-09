@@ -4,6 +4,7 @@ from app import db
 from models.social_connection import UserSocialConnection
 from flask_mail import Mail, Message
 from app import mail
+from flask import current_app
 
 class AuthService:
     @staticmethod
@@ -81,6 +82,6 @@ class AuthService:
 
     @staticmethod
     def send_verification_email(user):
-        msg = Message('Jūsų paskyra patvirtinta', sender='noreply@example.com', recipients=[user.email])
+        msg = Message('Jūsų paskyra patvirtinta', sender=current_app.config['MAIL_DEFAULT_SENDER'], recipients=[user.email])
         msg.body = f'Sveiki {user.username},\n\nJūsų paskyra buvo patvirtinta. Dabar galite prisijungti.'
         mail.send(msg) 
