@@ -31,14 +31,14 @@ You have the right to:
 - Access, update, or delete your personal information
 - Withdraw consent for data processing at any time
 
-To exercise these rights, contact us at: **igoris.cic@gmail.com**
+To exercise these rights, contact us at: **ausrine.cicinskaite@gmail.com**
 
 ## 7. Data Deletion
-If you wish to delete your account and all associated data, please contact us at **igoris.cic@gmail.com**.
+If you wish to delete your account and all associated data, please contact us at **ausrine.cicinskaite@gmail.com**.
 
 ## 8. Changes to This Policy
 We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page.
 
 ## 9. Contact
 If you have any questions about this Privacy Policy, please contact us at:
-**igoris.cic@gmail.com** 
+**ausrine.cicinskaite@gmail.com** 

@@ -90,4 +90,8 @@ def sentiment_demo():
     fig.savefig(buf, format='png')
     buf.seek(0)
     img_base64 = base64.b64encode(buf.read()).decode('utf-8')
-    return render_template('sentiment_demo.html', img_base64=img_base64, texts=texts, sentiment=sentiment_df.to_dict(orient='records')) 
+    return render_template('sentiment_demo.html', img_base64=img_base64, texts=texts, sentiment=sentiment_df.to_dict(orient='records'))
+
+@main.route('/privacy-policy')
+def privacy_policy():
+    return render_template('privacy_policy.html') 
