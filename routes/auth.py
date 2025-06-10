@@ -177,7 +177,9 @@ def facebook_callback():
 
 @auth.route('/login/linkedin')
 def linkedin_login():
+    print("DEBUG: LINKEDIN_REDIRECT_URI =", os.environ.get('LINKEDIN_REDIRECT_URI'))
     redirect_uri = url_for('auth.linkedin_callback', _external=True)
+    print(url_for('auth.linkedin_callback', _external=True))
     return oauth.linkedin.authorize_redirect(redirect_uri)
 
 @auth.route('/login/linkedin/callback')
