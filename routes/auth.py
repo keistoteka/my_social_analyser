@@ -182,46 +182,27 @@ def linkedin_login():
 
 @auth.route('/login/linkedin/callback')
 def linkedin_callback():
-    print('--- LinkedIn callback PASIEKTAS ---')
     try:
         token = oauth.linkedin.authorize_access_token()
-        print('Token:', token)
         resp = oauth.linkedin.get('me')
         profile = resp.json()
-        print('Profile:', profile)
         email_resp = oauth.linkedin.get('emailAddress?q=members&projection=(elements*(handle~))')
         email_data = email_resp.json()
-        print('Email data:', email_data)
         email = None
         if 'elements' in email_data and email_data['elements']:
             email = email_data['elements'][0]['handle~']['emailAddress']
         if not email:
             flash('Could not retrieve email from LinkedIn.', 'error')
-            print('ERROR: No email')
             return redirect(url_for('auth.login'))
         user = User.query.filter_by(email=email).first()
         if not user:
             flash('No user found with this LinkedIn email. Please register first.', 'error')
-            print('ERROR: No user')
-            return redirect(url_for('auth.login'))
-        if not user.is_verified:
-            flash('Your account is not yet approved by admin.', 'error')
-            print('ERROR: Not verified')
             return redirect(url_for('auth.login'))
         login_user(user)
         flash('Successfully logged in with LinkedIn!', 'success')
-        # Save or update token in UserSocialConnection
-        conn = UserSocialConnection.query.filter_by(user_id=user.id, platform='linkedin').first()
-        if not conn:
-            conn = UserSocialConnection(user_id=user.id, platform='linkedin')
-            db.session.add(conn)
-        conn.access_token = token['access_token']
-        conn.connected_at = db.func.now()
-        db.session.commit()
-        print('SUCCESS: Redirecting to dashboard')
+        # (optional) išsaugok access_token, jei reikia
         return redirect(url_for('main.dashboard'))
     except Exception as e:
-        print('EXCEPTION in LinkedIn callback:', e)
         flash('LinkedIn login failed. Please try again.', 'error')
         return redirect(url_for('auth.login'))
 
