@@ -3,17 +3,17 @@
 {% block content %}
 <div class="bg-white shadow rounded-lg">
     <div class="px-4 py-5 sm:p-6">
-        <h3 class="text-lg leading-6 font-medium text-gray-900">Administratoriaus Valdymo Skydelis</h3>
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Admin Dashboard</h3>
         
         <div class="mt-6">
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 <div class="px-4 py-5 sm:px-6">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">Vartotojų Statistika</h3>
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">User Statistics</h3>
                 </div>
                 <div class="border-t border-gray-200">
                     <dl>
                         <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt class="text-sm font-medium text-gray-500">Iš viso vartotojų</dt>
+                            <dt class="text-sm font-medium text-gray-500">Total users</dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ users|length }}</dd>
                         </div>
                     </dl>
@@ -23,7 +23,7 @@
 
         <div class="mt-8">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">Greitosios nuorodos</h3>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Quick Links</h3>
             </div>
             <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <a href="{{ url_for('admin.users') }}" class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400">
@@ -32,8 +32,8 @@
                     </div>
                     <div class="flex-1 min-w-0">
                         <span class="absolute inset-0" aria-hidden="true"></span>
-                        <p class="text-sm font-medium text-gray-900">Vartotojų valdymas</p>
-                        <p class="text-sm text-gray-500">Peržiūrėti ir valdyti vartotojus</p>
+                        <p class="text-sm font-medium text-gray-900">User Management</p>
+                        <p class="text-sm text-gray-500">View and manage users</p>
                     </div>
                 </a>
 
@@ -44,8 +44,8 @@
                     </div>
                     <div class="flex-1 min-w-0">
                         <span class="absolute inset-0" aria-hidden="true"></span>
-                        <p class="text-sm font-medium text-gray-900">Sukurti administratorių</p>
-                        <p class="text-sm text-gray-500">Pridėti naują administratorių</p>
+                        <p class="text-sm font-medium text-gray-900">Create Admin</p>
+                        <p class="text-sm text-gray-500">Add a new admin</p>
                     </div>
                 </a>
                 <form action="{{ url_for('admin.remove_unverified_users') }}" method="post" class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400">
@@ -66,8 +66,8 @@
                     </div>
                     <div class="flex-1 min-w-0">
                         <span class="absolute inset-0" aria-hidden="true"></span>
-                        <p class="text-sm font-medium text-gray-900">Siųsti pranešimą vartotojui</p>
-                        <p class="text-sm text-gray-500">Išsiųsti el. laišką pasirinktam vartotojui</p>
+                        <p class="text-sm font-medium text-gray-900">Send Message to User</p>
+                        <p class="text-sm text-gray-500">Send an email to a selected user</p>
                     </div>
                 </a>
             </div>

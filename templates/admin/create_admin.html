@@ -3,12 +3,12 @@
 {% block content %}
 <div class="bg-white shadow rounded-lg">
     <div class="px-4 py-5 sm:p-6">
-        <h3 class="text-lg leading-6 font-medium text-gray-900">Sukurti Naują Administratorių</h3>
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Create New Admin</h3>
         
         <div class="mt-6">
             <form method="POST" class="space-y-6">
                 <div>
-                    <label for="username" class="block text-sm font-medium text-gray-700">Vartotojo vardas</label>
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
                     <div class="mt-1">
                         <input type="text" name="username" id="username" required
                                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
@@ -16,7 +16,7 @@
                 </div>
 
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">El. pašto adresas</label>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
                     <div class="mt-1">
                         <input type="email" name="email" id="email" required
                                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
@@ -24,7 +24,7 @@
                 </div>
 
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Slaptažodis</label>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
                     <div class="mt-1">
                         <input type="password" name="password" id="password" required
                                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
@@ -32,7 +32,7 @@
                 </div>
 
                 <div>
-                    <label for="confirm_password" class="block text-sm font-medium text-gray-700">Patvirtinti slaptažodį</label>
+                    <label for="confirm_password" class="block text-sm font-medium text-gray-700">Confirm password</label>
                     <div class="mt-1">
                         <input type="password" name="confirm_password" id="confirm_password" required
                                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
@@ -44,7 +44,7 @@
                     <input type="checkbox" name="is_super_admin" id="is_super_admin"
                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
                     <label for="is_super_admin" class="ml-2 block text-sm text-gray-900">
-                        Super Administratorius
+                        Super Admin
                     </label>
                 </div>
                 {% endif %}
@@ -52,7 +52,7 @@
                 <div>
                     <button type="submit"
                             class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Sukurti Administratorių
+                        Create Admin
                     </button>
                 </div>
             </form>

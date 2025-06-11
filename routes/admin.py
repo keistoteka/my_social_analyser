@@ -13,7 +13,7 @@ admin = Blueprint('admin', __name__, url_prefix='/admin')
 def admin_required(f):
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated or not isinstance(current_user, Admin):
-            flash('Jums nėra leidimo pasiekti šį puslapį', 'error')
+            flash('You do not have permission to access this page', 'error')
             return redirect(url_for('admin.login'))
         return f(*args, **kwargs)
     decorated_function.__name__ = f.__name__
@@ -32,10 +32,10 @@ def login():
         
         if admin and check_password_hash(admin.password, password):
             login_user(admin)
-            flash('Sėkmingai prisijungėte', 'success')
+            flash('Successfully logged in', 'success')
             return redirect(url_for('admin.dashboard'))
         else:
-            flash('Neteisingas vartotojo vardas arba slaptažodis', 'error')
+            flash('Incorrect username or password', 'error')
             
     return render_template('admin/login.html')
 
@@ -43,7 +43,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('Sėkmingai atsijungėte', 'success')
+    flash('Successfully logged out', 'success')
     return redirect(url_for('admin.login'))
 
 @admin.route('/')
@@ -68,7 +68,7 @@ def verify_user(user_id):
     user.is_verified = True
     db.session.commit()
     AuthService.send_verification_email(user)
-    flash(f'Vartotojas {user.username} sėkmingai patvirtintas', 'success')
+    flash(f'User {user.username} successfully verified', 'success')
     return redirect(url_for('admin.users'))
 
 @admin.route('/users/<int:user_id>/unverify', methods=['POST'])
@@ -78,7 +78,7 @@ def unverify_user(user_id):
     user = db.session.get(User, user_id)
     user.is_verified = False
     db.session.commit()
-    flash(f'Vartotojo {user.username} patvirtinimas atšauktas', 'success')
+    flash(f'User {user.username} verification revoked', 'success')
     return redirect(url_for('admin.users'))
 
 @admin.route('/users/<int:user_id>/delete', methods=['POST'])
@@ -88,7 +88,7 @@ def delete_user(user_id):
     user = db.session.get(User, user_id)
     db.session.delete(user)
     db.session.commit()
-    flash('Vartotojas sėkmingai ištrintas', 'success')
+    flash('User successfully deleted', 'success')
     return redirect(url_for('admin.users'))
 
 @admin.route('/create-admin', methods=['GET', 'POST'])
@@ -96,7 +96,7 @@ def delete_user(user_id):
 @admin_required
 def create_admin():
     if not current_user.is_super_admin:
-        flash('Jums nėra leidimo kurti administratorius', 'error')
+        flash('You do not have permission to create admins', 'error')
         return redirect(url_for('admin.dashboard'))
         
     if request.method == 'POST':
@@ -106,11 +106,11 @@ def create_admin():
         is_super_admin = bool(request.form.get('is_super_admin'))
         
         if Admin.query.filter_by(username=username).first():
-            flash('Toks vartotojo vardas jau egzistuoja', 'error')
+            flash('This username already exists', 'error')
             return redirect(url_for('admin.create_admin'))
             
         if Admin.query.filter_by(email=email).first():
-            flash('Toks el. pašto adresas jau egzistuoja', 'error')
+            flash('This email address already exists', 'error')
             return redirect(url_for('admin.create_admin'))
             
         new_admin = Admin(
@@ -122,7 +122,7 @@ def create_admin():
         
         db.session.add(new_admin)
         db.session.commit()
-        flash('Administratorius sėkmingai sukurtas', 'success')
+        flash('Admin successfully created', 'success')
         return redirect(url_for('admin.dashboard'))
         
     return render_template('admin/create_admin.html')
@@ -153,13 +153,13 @@ def message_user():
         message = request.form.get('message')
         user = db.session.get(User, user_id)
         if not user:
-            flash('Vartotojas nerastas', 'error')
+            flash('User not found', 'error')
             return redirect(url_for('admin.message_user'))
         msg = Message(subject, recipients=[user.email])
         msg.body = message
         from app import mail
         mail.send(msg)
-        flash(f'Pranešimas išsiųstas vartotojui {user.username}', 'success')
+        flash(f'Message sent to user {user.username}', 'success')
         return redirect(url_for('admin.message_user'))
     return render_template('admin/message_user.html', users=users)
 
@@ -170,5 +170,5 @@ def activate_premium(user_id):
     user = db.session.get(User, user_id)
     user.premium_until = datetime.utcnow() + timedelta(days=3)
     db.session.commit()
-    flash(f'Vartotojui {user.username} premium aktyvuotas 3 dienoms.', 'success')
+    flash(f'Premium activated for user {user.username} for 3 days.', 'success')
     return redirect(url_for('admin.users')) 

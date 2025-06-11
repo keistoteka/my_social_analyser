@@ -4,23 +4,23 @@
 <div class="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Premium planai
+            Premium Plans
         </h2>
         <p class="mt-2 text-center text-sm text-gray-600">
-            Pasirinkite norimą premium plano trukmę
+            Choose your preferred premium plan duration
         </p>
     </div>
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <form method="POST" class="space-y-4">
-                <button name="plan" value="1m" class="w-full py-2 px-4 rounded bg-indigo-600 text-white font-bold hover:bg-indigo-700">1 mėnesiui</button>
-                <button name="plan" value="3m" class="w-full py-2 px-4 rounded bg-indigo-600 text-white font-bold hover:bg-indigo-700">3 mėnesiams</button>
-                <button name="plan" value="6m" class="w-full py-2 px-4 rounded bg-indigo-600 text-white font-bold hover:bg-indigo-700">6 mėnesiams</button>
-                <button name="plan" value="12m" class="w-full py-2 px-4 rounded bg-indigo-600 text-white font-bold hover:bg-indigo-700">1 metams</button>
+                <button name="plan" value="1m" class="w-full py-2 px-4 rounded bg-indigo-600 text-white font-bold hover:bg-indigo-700">1 Month</button>
+                <button name="plan" value="3m" class="w-full py-2 px-4 rounded bg-indigo-600 text-white font-bold hover:bg-indigo-700">3 Months</button>
+                <button name="plan" value="6m" class="w-full py-2 px-4 rounded bg-indigo-600 text-white font-bold hover:bg-indigo-700">6 Months</button>
+                <button name="plan" value="12m" class="w-full py-2 px-4 rounded bg-indigo-600 text-white font-bold hover:bg-indigo-700">1 Year</button>
             </form>
             {% if current_user.premium_until and current_user.premium_until > now %}
             <div class="mt-4 text-green-600 text-center">
-                Jūsų premium galioja iki: {{ current_user.premium_until.strftime('%Y-%m-%d') }}
+                Your premium is active until: {{ current_user.premium_until.strftime('%Y-%m-%d') }}
             </div>
             {% endif %}
         </div>

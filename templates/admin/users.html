@@ -3,7 +3,7 @@
 {% block content %}
 <div class="bg-white shadow rounded-lg">
     <div class="px-4 py-5 sm:p-6">
-        <h3 class="text-lg leading-6 font-medium text-gray-900">Vartotojų Valdymas</h3>
+        <h3 class="text-lg leading-6 font-medium text-gray-900">User Management</h3>
         
         <div class="mt-6">
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
@@ -11,19 +11,19 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Vartotojo vardas
+                                Username
                             </th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                El. pašto adresas
+                                Email address
                             </th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Registracijos data
+                                Registration date
                             </th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Būsena
+                                Status
                             </th>
                             <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Veiksmai
+                                Actions
                             </th>
                         </tr>
                     </thead>
@@ -42,32 +42,32 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {% if user.is_verified %}
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    Patvirtintas
+                                    Verified
                                 </span>
                                 {% else %}
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                    Laukia patvirtinimo
+                                    Awaiting verification
                                 </span>
                                 {% endif %}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 {% if not user.is_verified %}
                                 <form method="POST" action="{{ url_for('admin.verify_user', user_id=user.id) }}" class="inline">
-                                    <button type="submit" class="text-green-600 hover:text-green-900 mr-3">Patvirtinti</button>
+                                    <button type="submit" class="text-green-600 hover:text-green-900 mr-3">Verify</button>
                                 </form>
                                 {% else %}
                                 <form method="POST" action="{{ url_for('admin.unverify_user', user_id=user.id) }}" class="inline">
-                                    <button type="submit" class="text-yellow-600 hover:text-yellow-900 mr-3">Atšaukti patvirtinimą</button>
+                                    <button type="submit" class="text-yellow-600 hover:text-yellow-900 mr-3">Unverify</button>
                                 </form>
                                 {% endif %}
-                                <form method="POST" action="{{ url_for('admin.delete_user', user_id=user.id) }}" class="inline" onsubmit="return confirm('Ar tikrai norite ištrinti šį vartotoją?');">
-                                    <button type="submit" class="text-red-600 hover:text-red-900">Ištrinti</button>
+                                <form method="POST" action="{{ url_for('admin.delete_user', user_id=user.id) }}" class="inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                    <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
                                 </form>
                                 <form method="POST" action="{{ url_for('admin.activate_premium', user_id=user.id) }}" class="inline">
-                                    <button type="submit" class="text-yellow-600 hover:text-yellow-900 ml-3"><i class="fas fa-crown mr-1"></i>Premium 3 d.</button>
+                                    <button type="submit" class="text-yellow-600 hover:text-yellow-900 ml-3"><i class="fas fa-crown mr-1"></i>Premium 3d</button>
                                 </form>
                                 {% if user.premium_until and user.premium_until > now %}
-                                <span class="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">iki {{ user.premium_until.strftime('%Y-%m-%d') }}</span>
+                                <span class="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">until {{ user.premium_until.strftime('%Y-%m-%d') }}</span>
                                 {% endif %}
                             </td>
                         </tr>

@@ -9,7 +9,7 @@ premium_bp = Blueprint('premium', __name__)
 @login_required
 def premium():
     if current_user.premium_until and current_user.premium_until > datetime.utcnow():
-        flash(f'Jūsų premium planas galioja iki {current_user.premium_until.strftime("%Y-%m-%d")}', 'info')
+        flash(f'Your premium plan is active until {current_user.premium_until.strftime("%Y-%m-%d")}', 'info')
     if 'plan' in (getattr(request, 'form', {}) or {}):
         plan = request.form.get('plan')
         if plan == '1m':
@@ -21,9 +21,9 @@ def premium():
         elif plan == '12m':
             current_user.premium_until = datetime.utcnow() + timedelta(days=365)
         else:
-            flash('Neteisingas planas.', 'error')
+            flash('Invalid plan.', 'error')
             return redirect(url_for('premium.premium'))
         db.session.commit()
-        flash('Premium planas aktyvuotas!', 'success')
+        flash('Premium plan activated!', 'success')
         return redirect(url_for('premium.premium'))
     return render_template('premium/plans.html') 
