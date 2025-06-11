@@ -94,4 +94,9 @@ def sentiment_demo():
 
 @main.route('/privacy-policy')
 def privacy_policy():
-    return render_template('privacy_policy.html') 
+    return render_template('privacy_policy.html')
+
+@main.route('/terms')
+def terms():
+    from datetime import datetime
+    return render_template('terms.html', now=datetime.utcnow()) 
