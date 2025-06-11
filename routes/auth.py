@@ -9,6 +9,9 @@ from models.social_connection import UserSocialConnection
 import requests
 import os
 from flask_mail import Message
+import secrets
+import string
+from datetime import datetime, timedelta
 
 auth = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -58,6 +61,8 @@ def register():
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
+        if current_user.is_temporary_password:
+            return redirect(url_for('auth.change_password'))
         return redirect(url_for('main.dashboard'))
 
     email = ''
@@ -68,12 +73,17 @@ def login():
 
         user = User.query.filter_by(email=email).first()
         if user and check_password_hash(user.password, password):
+            if user.is_temporary_password:
+                if user.temp_password_expires_at and user.temp_password_expires_at < datetime.utcnow():
+                    flash('Your temporary password has expired. Please request a new one.', 'error')
+                    return redirect(url_for('auth.forgot_password'))
             if not user.is_verified:
                 flash('Your account is not yet approved by admin.', 'error')
                 return render_template('login.html', email=email)
             login_user(user, remember=remember)
             flash('Successfully logged in!', 'success')
-            # Redirect admin to admin panel, user to dashboard
+            if user.is_temporary_password:
+                return redirect(url_for('auth.change_password'))
             if hasattr(user, 'is_super_admin') and getattr(user, 'is_super_admin', False):
                 return redirect(url_for('admin.dashboard'))
             else:
@@ -127,6 +137,7 @@ def profile():
                 return redirect(url_for('auth.profile'))
 
             current_user.password = generate_password_hash(new_password)
+            current_user.is_temporary_password = False
 
         db.session.commit()
         flash('Profilis sėkmingai atnaujintas', 'success')
@@ -249,4 +260,105 @@ def instagram_callback():
 
 @auth.route('/linkedin-login')
 def oauth_linkedin_login():
-    return redirect(url_for('auth.linkedin_login')) 
+    return redirect(url_for('auth.linkedin_login'))
+
+@auth.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        user = User.query.filter_by(email=email).first()
+        if user:
+            # Generate a temporary password
+            temp_password = ''.join(secrets.choice(string.ascii_letters + string.digits + string.punctuation) for _ in range(12))
+            user.password = generate_password_hash(temp_password)
+            user.is_temporary_password = True
+            user.temp_password_expires_at = datetime.utcnow() + timedelta(hours=1)
+            db.session.commit()
+
+            # Send email with temporary password
+            msg = Message('Your Temporary Password', recipients=[email])
+            msg.body = f'Your temporary password is: {temp_password}. Please change it after logging in.'
+            mail.send(msg)
+
+            flash('A temporary password has been sent to your email.', 'success')
+            return redirect(url_for('auth.login'))
+        else:
+            flash('Email not found.', 'error')
+    return render_template('forgot_password.html')
+
+@auth.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if not current_user.temp_password_expires_at:
+        flash('No temporary password to change.', 'error')
+        return redirect(url_for('main.index'))
+    
+    if current_user.temp_password_expires_at < datetime.utcnow():
+        flash('Temporary password has expired. Please request a new one.', 'error')
+        return redirect(url_for('main.index'))
+    
+    if current_user.is_blocked:
+        if current_user.blocked_until and current_user.blocked_until > datetime.utcnow():
+            flash(f'Your account is blocked until {current_user.blocked_until.strftime("%Y-%m-%d %H:%M:%S")}. Please try again later.', 'error')
+            return redirect(url_for('main.index'))
+        else:
+            # Reset block status if block time has passed
+            current_user.is_blocked = False
+            current_user.blocked_until = None
+            current_user.password_change_attempts = 0
+            db.session.commit()
+    
+    if request.method == 'POST':
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        
+        if not new_password or not confirm_password:
+            flash('All fields are required.', 'error')
+            return render_template('auth/change_password.html')
+        
+        if new_password != confirm_password:
+            flash('Passwords do not match.', 'error')
+            return render_template('auth/change_password.html')
+        
+        if len(new_password) < 8:
+            flash('Password must be at least 8 characters long.', 'error')
+            return render_template('auth/change_password.html')
+        
+        if not any(c.isupper() for c in new_password):
+            flash('Password must contain at least one uppercase letter.', 'error')
+            return render_template('auth/change_password.html')
+        
+        if not any(c.islower() for c in new_password):
+            flash('Password must contain at least one lowercase letter.', 'error')
+            return render_template('auth/change_password.html')
+        
+        if not any(c.isdigit() for c in new_password):
+            flash('Password must contain at least one number.', 'error')
+            return render_template('auth/change_password.html')
+        
+        if not any(c in '!@#$%^&*()_+-=[]{}|;:,.<>?' for c in new_password):
+            flash('Password must contain at least one special character.', 'error')
+            return render_template('auth/change_password.html')
+        
+        # Increment password change attempts
+        current_user.password_change_attempts += 1
+        
+        # Check if user has exceeded maximum attempts
+        if current_user.password_change_attempts >= 3:
+            # Block user for 1 hour
+            current_user.is_blocked = True
+            current_user.blocked_until = datetime.utcnow() + timedelta(hours=1)
+            db.session.commit()
+            flash('Too many failed attempts. Your account has been blocked for 1 hour.', 'error')
+            return redirect(url_for('main.index'))
+        
+        # Update password and reset temporary password fields
+        current_user.set_password(new_password)
+        current_user.temp_password_expires_at = None
+        current_user.password_change_attempts = 0  # Reset attempts on successful change
+        db.session.commit()
+        
+        flash('Password changed successfully.', 'success')
+        return redirect(url_for('main.index'))
+    
+    return render_template('auth/change_password.html') 

@@ -63,6 +63,12 @@
                                 <form method="POST" action="{{ url_for('admin.delete_user', user_id=user.id) }}" class="inline" onsubmit="return confirm('Ar tikrai norite ištrinti šį vartotoją?');">
                                     <button type="submit" class="text-red-600 hover:text-red-900">Ištrinti</button>
                                 </form>
+                                <form method="POST" action="{{ url_for('admin.activate_premium', user_id=user.id) }}" class="inline">
+                                    <button type="submit" class="text-yellow-600 hover:text-yellow-900 ml-3"><i class="fas fa-crown mr-1"></i>Premium 3 d.</button>
+                                </form>
+                                {% if user.premium_until and user.premium_until > now %}
+                                <span class="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">iki {{ user.premium_until.strftime('%Y-%m-%d') }}</span>
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}

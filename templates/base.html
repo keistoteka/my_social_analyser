@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body class="bg-gray-100">
     <!-- Fixed Navigation Bar -->
@@ -19,21 +20,22 @@
                     </div>
                     <div class="hidden md:ml-6 md:flex md:space-x-8">
                         {% if not current_user.is_authenticated %}
-                        <a href="/" class="inline-flex items-center px-1 pt-1 {% if request.path == '/' %}text-indigo-600 font-bold border-b-2 border-indigo-600{% else %}text-gray-500 hover:text-gray-700{% endif %}">Home</a>
+                        <a href="/" class="inline-flex items-center px-1 pt-1 {% if request.path == '/' %}text-indigo-600 font-bold{% else %}text-gray-500 hover:text-gray-700{% endif %}">Home</a>
                         {% endif %}
                         {% if current_user.is_authenticated %}
-                        <a href="/dashboard" class="inline-flex items-center px-1 pt-1 {% if request.path.startswith('/dashboard') %}text-indigo-600 font-bold border-b-2 border-indigo-600{% else %}text-gray-500 hover:text-gray-700{% endif %}">Dashboard</a>
-                        <a href="/analyze" class="inline-flex items-center px-1 pt-1 {% if request.path.startswith('/analyze') %}text-indigo-600 font-bold border-b-2 border-indigo-600{% else %}text-gray-500 hover:text-gray-700{% endif %}">Analyze</a>
-                        <a href="/auth/profile" class="inline-flex items-center px-1 pt-1 {% if request.path.startswith('/auth/profile') %}text-indigo-600 font-bold border-b-2 border-indigo-600{% else %}text-gray-500 hover:text-gray-700{% endif %}">Profile</a>
+                        <a href="/dashboard" class="inline-flex items-center px-2 pt-0 pb-0.5 {% if request.path.startswith('/dashboard') %}text-indigo-600 font-bold{% else %}text-gray-500 hover:text-gray-700{% endif %}">Dashboard</a>
+                        <a href="/analyze" class="inline-flex items-center px-2 pt-0 pb-0.5 {% if request.path.startswith('/analyze') %}text-indigo-600 font-bold{% else %}text-gray-500 hover:text-gray-700{% endif %}">Analyze</a>
                         {% endif %}
                     </div>
 
                 </div>
-                <div class="flex items-center">
+                <div class="flex items-center space-x-6">
                     {% if current_user.is_authenticated %}
                         {% if current_user.is_super_admin %}
-                        <a href="{{ url_for('admin.dashboard') }}" class="text-sm font-medium px-3 py-2 rounded-md {% if request.path.startswith('/admin') %}text-indigo-600 font-bold border-b-2 border-indigo-600{% else %}text-gray-500 hover:text-gray-700{% endif %}"><i class="fas fa-user-shield mr-1"></i>Admin Panel</a>
+                        <a href="{{ url_for('admin.dashboard') }}" class="text-sm font-medium px-3 py-2 rounded-md {% if request.path.startswith('/admin') %}text-indigo-600 font-bold{% else %}text-gray-500 hover:text-gray-700{% endif %}"><i class="fas fa-user-shield mr-1"></i>Admin Panel</a>
                         {% endif %}
+                        <a href="/premium" class="inline-flex items-center px-2 pt-0 pb-0.5 {% if request.path.startswith('/premium') %}text-yellow-600 font-bold{% else %}text-yellow-500 hover:text-yellow-700{% endif %}"><i class="fas fa-crown mr-1"></i>Premium{% if current_user.premium_until and current_user.premium_until > now %} <span class="ml-1 text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">iki {{ current_user.premium_until.strftime('%Y-%m-%d') }}</span>{% endif %}</a>
+                        <a href="/auth/profile" class="inline-flex items-center px-2 pt-0 pb-0.5 {% if request.path.startswith('/auth/profile') %}text-indigo-600 font-bold{% else %}text-gray-500 hover:text-gray-700{% endif %}">Profile</a>
                         <a href="/auth/logout" class="text-gray-500 hover:text-gray-700 ml-2">Logout</a>
                     {% else %}
                         <a href="/auth/login" class="text-gray-500 hover:text-gray-700">Login</a>

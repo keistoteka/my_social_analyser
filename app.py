@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from authlib.integrations.flask_client import OAuth
 from extensions import db, login_manager, oauth, mail
 from flask_mail import Mail
+from flask_migrate import Migrate
 
 # Load environment variables
 load_dotenv()
@@ -76,9 +77,11 @@ def create_app():
     from routes.auth import auth
     from routes.main import main
     from routes.admin import admin
+    from routes.premium import premium_bp
     app.register_blueprint(auth)
     app.register_blueprint(main)
     app.register_blueprint(admin)
+    app.register_blueprint(premium_bp)
     
     # User loader
     from models.user import User
@@ -93,6 +96,8 @@ def create_app():
             user_id_int = int(user_id.split('-')[1])
             return db.session.get(User, user_id_int)
         return None
+    
+    migrate = Migrate(app, db)
     
     return app
 

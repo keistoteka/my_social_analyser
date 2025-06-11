@@ -6,6 +6,7 @@ from models.user import User
 from app import db
 from services.auth_service import AuthService
 from flask_mail import Message
+from datetime import datetime, timedelta
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -160,4 +161,14 @@ def message_user():
         mail.send(msg)
         flash(f'Pranešimas išsiųstas vartotojui {user.username}', 'success')
         return redirect(url_for('admin.message_user'))
-    return render_template('admin/message_user.html', users=users) 
+    return render_template('admin/message_user.html', users=users)
+
+@admin.route('/users/<int:user_id>/activate-premium', methods=['POST'])
+@login_required
+@admin_required
+def activate_premium(user_id):
+    user = db.session.get(User, user_id)
+    user.premium_until = datetime.utcnow() + timedelta(days=3)
+    db.session.commit()
+    flash(f'Vartotojui {user.username} premium aktyvuotas 3 dienoms.', 'success')
+    return redirect(url_for('admin.users')) 

@@ -74,42 +74,41 @@
             <div class="mt-4 bg-white shadow overflow-hidden sm:rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
                     <div class="space-y-4">
+                        <!-- Free analysis (always enabled) -->
                         <div class="flex items-start">
                             <div class="flex items-center h-5">
-                                <input id="engagement" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                <input id="engagement" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
                             </div>
                             <div class="ml-3 text-sm">
                                 <label for="engagement" class="font-medium text-gray-700">Engagement Analysis</label>
                                 <p class="text-gray-500">Analyze likes, comments, and shares across platforms</p>
                             </div>
                         </div>
-
+                        <!-- Premium analyses (disabled for free users) -->
                         <div class="flex items-start">
                             <div class="flex items-center h-5">
-                                <input id="sentiment" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                <input id="sentiment" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" {% if not current_user.premium_until or current_user.premium_until < now %}disabled{% endif %} />
                             </div>
                             <div class="ml-3 text-sm">
-                                <label for="sentiment" class="font-medium text-gray-700">Sentiment Analysis</label>
+                                <label for="sentiment" class="font-medium text-gray-700 {% if not current_user.premium_until or current_user.premium_until < now %}opacity-50 cursor-not-allowed{% endif %}" {% if not current_user.premium_until or current_user.premium_until < now %}title="Galima tik su premium planu"{% endif %}>Sentiment Analysis</label>
                                 <p class="text-gray-500">Analyze the sentiment of your posts and comments</p>
                             </div>
                         </div>
-
                         <div class="flex items-start">
                             <div class="flex items-center h-5">
-                                <input id="growth" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                <input id="growth" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" {% if not current_user.premium_until or current_user.premium_until < now %}disabled{% endif %} />
                             </div>
                             <div class="ml-3 text-sm">
-                                <label for="growth" class="font-medium text-gray-700">Growth Analysis</label>
+                                <label for="growth" class="font-medium text-gray-700 {% if not current_user.premium_until or current_user.premium_until < now %}opacity-50 cursor-not-allowed{% endif %}" {% if not current_user.premium_until or current_user.premium_until < now %}title="Galima tik su premium planu"{% endif %}>Growth Analysis</label>
                                 <p class="text-gray-500">Track follower growth and engagement trends</p>
                             </div>
                         </div>
-
                         <div class="flex items-start">
                             <div class="flex items-center h-5">
-                                <input id="content" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                <input id="content" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" {% if not current_user.premium_until or current_user.premium_until < now %}disabled{% endif %} />
                             </div>
                             <div class="ml-3 text-sm">
-                                <label for="content" class="font-medium text-gray-700">Content Analysis</label>
+                                <label for="content" class="font-medium text-gray-700 {% if not current_user.premium_until or current_user.premium_until < now %}opacity-50 cursor-not-allowed{% endif %}" {% if not current_user.premium_until or current_user.premium_until < now %}title="Galima tik su premium planu"{% endif %}>Content Analysis</label>
                                 <p class="text-gray-500">Analyze your most successful content types</p>
                             </div>
                         </div>
@@ -204,29 +203,7 @@
   </div>
 </div>
 
-<script>
-function openModal(platform) {
-  document.getElementById('connectModal').classList.remove('hidden');
-  document.getElementById('modalPlatformTitle').textContent = 'Connect to ' + platform.charAt(0).toUpperCase() + platform.slice(1);
-  document.getElementById('modalPlatformInput').value = platform.toLowerCase();
-}
-function closeModal() {
-  document.getElementById('connectModal').classList.add('hidden');
-}
-document.querySelectorAll('.connect-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    openModal(this.dataset.platform);
-  });
-});
-document.getElementById('connectForm').addEventListener('submit', function(e) {
-  if (document.getElementById('modalPlatformInput').value === 'facebook') {
-    const rememberCheckbox = document.querySelector('input[name="remember_facebook_creds"]');
-    if (rememberCheckbox && rememberCheckbox.checked) {
-      sessionStorage.setItem('remember_facebook_creds', 'true');
-    }
-  }
-});
-</script>
+<script src="{{ url_for('static', filename='js/analyze.js') }}"></script>
 <style>
 input[type="checkbox"].round-checkbox {
   border-radius: 50%;
