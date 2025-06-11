@@ -90,7 +90,7 @@
                                 <input id="sentiment" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" {% if not current_user.premium_until or current_user.premium_until < now %}disabled{% endif %} />
                             </div>
                             <div class="ml-3 text-sm">
-                                <label for="sentiment" class="font-medium text-gray-700 {% if not current_user.premium_until or current_user.premium_until < now %}opacity-50 cursor-not-allowed{% endif %}" {% if not current_user.premium_until or current_user.premium_until < now %}title="Galima tik su premium planu"{% endif %}>Sentiment Analysis</label>
+                                <label for="sentiment" class="font-medium text-gray-700 {% if not current_user.premium_until or current_user.premium_until < now %}opacity-50 cursor-not-allowed{% endif %}" {% if not current_user.premium_until or current_user.premium_until < now %}title="Available with premium only"{% endif %}>Sentiment Analysis</label>
                                 <p class="text-gray-500">Analyze the sentiment of your posts and comments</p>
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                                 <input id="growth" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" {% if not current_user.premium_until or current_user.premium_until < now %}disabled{% endif %} />
                             </div>
                             <div class="ml-3 text-sm">
-                                <label for="growth" class="font-medium text-gray-700 {% if not current_user.premium_until or current_user.premium_until < now %}opacity-50 cursor-not-allowed{% endif %}" {% if not current_user.premium_until or current_user.premium_until < now %}title="Galima tik su premium planu"{% endif %}>Growth Analysis</label>
+                                <label for="growth" class="font-medium text-gray-700 {% if not current_user.premium_until or current_user.premium_until < now %}opacity-50 cursor-not-allowed{% endif %}" {% if not current_user.premium_until or current_user.premium_until < now %}title="Available with premium only"{% endif %}>Growth Analysis</label>
                                 <p class="text-gray-500">Track follower growth and engagement trends</p>
                             </div>
                         </div>
@@ -108,7 +108,7 @@
                                 <input id="content" name="analysis-type" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" {% if not current_user.premium_until or current_user.premium_until < now %}disabled{% endif %} />
                             </div>
                             <div class="ml-3 text-sm">
-                                <label for="content" class="font-medium text-gray-700 {% if not current_user.premium_until or current_user.premium_until < now %}opacity-50 cursor-not-allowed{% endif %}" {% if not current_user.premium_until or current_user.premium_until < now %}title="Galima tik su premium planu"{% endif %}>Content Analysis</label>
+                                <label for="content" class="font-medium text-gray-700 {% if not current_user.premium_until or current_user.premium_until < now %}opacity-50 cursor-not-allowed{% endif %}" {% if not current_user.premium_until or current_user.premium_until < now %}title="Available with premium only"{% endif %}>Content Analysis</label>
                                 <p class="text-gray-500">Analyze your most successful content types</p>
                             </div>
                         </div>
