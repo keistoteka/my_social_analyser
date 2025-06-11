@@ -39,6 +39,7 @@ def create_app():
     app.config['LINKEDIN_CLIENT_SECRET'] = os.getenv('LINKEDIN_CLIENT_SECRET', 'your-linkedin-client-secret')
     app.config['INSTAGRAM_CLIENT_ID'] = os.getenv('INSTAGRAM_CLIENT_ID', 'your-instagram-client-id')
     app.config['INSTAGRAM_CLIENT_SECRET'] = os.getenv('INSTAGRAM_CLIENT_SECRET', 'your-instagram-client-secret')
+    
     oauth.register(
         name='facebook',
         client_id=app.config['FACEBOOK_CLIENT_ID'],
