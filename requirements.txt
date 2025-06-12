@@ -22,3 +22,4 @@ Flask-Mail
 gunicorn
 authlib
 Flask-Migrate
+textblob
